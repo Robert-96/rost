@@ -42,7 +42,7 @@ class Rost:
         self.after_callback = after_callback
 
         self.env = Environment(
-            loader=FileSystemLoader('./templates'),
+            loader=FileSystemLoader(self.searchpath),
             trim_blocks=True,
             lstrip_blocks=True
         )
@@ -86,6 +86,7 @@ class Rost:
     def is_static(self, template_name):
         """Check if a template is a static template. Static templates are copied,
         rather than compiled using Jinja2.
+
         A template is considered static if it lives in any of the directories
         specified in ``staticpaths``.
         """
@@ -93,21 +94,25 @@ class Rost:
         return any(template_name.startswith(path) for path in self.staticpaths)
 
     def is_partial(self, template_name):
-        """Check if a template is a partial template.
-        """
+        """Check if a template is a partial template."""
 
         return any((path.startswith("_") for path in template_name.split("/")))
 
     def is_ignored(self, template_name):
+        """Check if a template should be ignored."""
+
         return any((path.startswith(".") for path in template_name.split("/")))
 
     def is_template(self, filename):
+        """Check if a file is a template."""
+
         if self.is_partial(filename):
             return False
         if self.is_ignored(filename):
             return False
         if self.is_static(filename):
             return False
+
         return True
 
     def clear_build(self):
@@ -141,8 +146,6 @@ class Rost:
             self.render_template(template)
 
     def build(self):
-        click.secho("Build project...", bold=True, fg="bright_black")
-
         self.clear_build()
 
         if self.before_callback:
@@ -153,8 +156,6 @@ class Rost:
 
         if self.after_callback:
             self.after_callback(searchpath=self.searchpath, outputpath=self.outputpath)
-
-        click.secho("Project successfully build.\n", bold=True, fg="green")
 
     def watch(self, monitorpaths=None):
         self.build()

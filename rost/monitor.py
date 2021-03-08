@@ -5,6 +5,7 @@ import click
 
 
 class FileMonitor:
+    """Creates an observer thread that is watching directories and dispatches callback calls."""
 
     def __init__(self, monitorpaths, callback):
         self.monitorpaths = monitorpaths
@@ -28,9 +29,9 @@ class FileMonitor:
         self.observer.start()
 
     def start(self):
-        click.secho("Start monitoring:", bold=True, fg="bright_black")
+        click.secho("  Start monitoring:", bold=True, fg="bright_black")
         for path in self.monitorpaths:
-            click.secho(" * {}".format(path), bold=True, fg="cyan")
+            click.secho("   * {}".format(path), bold=True, fg="cyan")
         click.echo()
 
         self.run()

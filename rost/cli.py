@@ -4,6 +4,27 @@ from click_help_colors import HelpColorsGroup
 from .generator import Rost
 
 
+ASCI_ART = """\
+
+  RRRRRRRRRRRRRRRRR                                              tttt
+  R::::::::::::::::R                                          ttt:::t
+  R::::::RRRRRR:::::R                                         t:::::t
+  RR:::::R     R:::::R                                        t:::::t
+    R::::R     R:::::R   ooooooooooo       ssssssssss   ttttttt:::::ttttttt
+    R::::R     R:::::R oo:::::::::::oo   ss::::::::::s  t:::::::::::::::::t
+    R::::RRRRRR:::::R o:::::::::::::::oss:::::::::::::s t:::::::::::::::::t
+    R:::::::::::::RR  o:::::ooooo:::::os::::::ssss:::::stttttt:::::::tttttt
+    R::::RRRRRR:::::R o::::o     o::::o s:::::s  ssssss       t:::::t
+    R::::R     R:::::Ro::::o     o::::o   s::::::s            t:::::t
+    R::::R     R:::::Ro::::o     o::::o      s::::::s         t:::::t
+    R::::R     R:::::Ro::::o     o::::ossssss   s:::::s       t:::::t    tttttt
+  RR:::::R     R:::::Ro:::::ooooo:::::os:::::ssss::::::s      t::::::tttt:::::t
+  R::::::R     R:::::Ro:::::::::::::::os::::::::::::::s       tt::::::::::::::t
+  R::::::R     R:::::R oo:::::::::::oo  s:::::::::::ss          tt:::::::::::tt
+  RRRRRRRR     RRRRRRR   ooooooooooo     sssssssssss              ttttttttttt
+
+"""
+
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
 
@@ -41,6 +62,8 @@ def add_options(options):
 def cli():
     """A simple static site generator based on Jinja2 with a CLI build using Click."""
 
+    click.secho(ASCI_ART, fg="bright_black", bold=True)
+
 
 @cli.command()
 @add_options([
@@ -51,12 +74,17 @@ def cli():
 def build(searchpath, outputpath, staticpaths):
     """Build the project."""
 
-    print(searchpath)
-    print(outputpath)
-    print(staticpaths)
+    click.echo("  Searchpath:  {}".format(click.style(searchpath, fg="blue", bold=True)))
+    click.echo("  Outputpath:  {}".format(click.style(outputpath, fg="blue", bold=True)))
+    click.echo("  Staticpaths: {}".format(", ".join([click.style(path, fg="blue", bold=True) for path in staticpaths])))
+    click.echo("")
+
+    click.secho("  Build project...", bold=True, fg="bright_black")
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
     rost.build()
+
+    click.secho("  Project successfully build.\n", bold=True, fg="green")
 
 
 @cli.command()
@@ -68,7 +96,14 @@ def build(searchpath, outputpath, staticpaths):
 def watch(searchpath, outputpath, staticpaths):
     """Start an development server and re-build the project if the source directory for change."""
 
-    rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
+    def before_callback(*args, **kwargs):
+        click.secho("  Build project...", bold=True, fg="bright_black")
+
+    def after_callback(*args, **kwargs):
+        click.secho("   successfully build.\n", bold=True, fg="green")
+
+    rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
+                before_callback=before_callback, after_callback=after_callback)
     rost.watch()
 
 

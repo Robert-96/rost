@@ -6,13 +6,14 @@ import click
 
 
 class WebServer:
+    """Create a very basic webserver serving files relative to the given directory."""
 
-    def __init__(self, bind='localhost', port=8080, directory='.'):
+    def __init__(self, bind="localhost", port=8080, directory="."):
         self.bind = bind
         self.port = port
+        self.directory = directory
 
         self.server_address = (self.bind, self.port)
-        self.directory = directory
 
     def _target(self, server_address, directory):
         httpd = HTTPServer(server_address, partial(SimpleHTTPRequestHandler, directory=directory))
@@ -25,8 +26,8 @@ class WebServer:
     def start(self):
         url = "http://{}:{}/".format(self.bind, self.port)
 
-        click.secho("Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
-        click.secho("Press Ctrl + C to stop...\n", bold=True, fg="bright_black")
+        click.secho("  Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
+        click.secho("  Press Ctrl + C to stop...\n", bold=True, fg="bright_black")
 
         self.run()
 
