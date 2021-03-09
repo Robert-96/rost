@@ -2,8 +2,6 @@ import threading
 from functools import partial
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-import click
-
 
 class WebServer:
     """Create a very basic webserver serving files relative to the given directory."""

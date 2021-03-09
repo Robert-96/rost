@@ -1,8 +1,6 @@
 from watchdog.events import LoggingEventHandler
 from watchdog.observers import Observer
 
-import click
-
 
 class FileMonitor:
     """Creates an observer thread that is watching directories and dispatches callback calls."""

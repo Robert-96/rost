@@ -7,7 +7,7 @@ from rost.generator import Rost
 def test_happy_flow(tmpdir):
     searchpath = "{}/example/templates".format(os.path.abspath("."))
     outputpath = "{}/dist".format(tmpdir)
-    staticpaths=["static"]
+    staticpaths = ["static"]
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
     rost.build()
@@ -23,7 +23,7 @@ def test_happy_flow(tmpdir):
 def test_context(tmpdir):
     searchpath = "{}/example/templates".format(os.path.abspath("."))
     outputpath = "{}/dist".format(tmpdir)
-    staticpaths=["static"]
+    staticpaths = ["static"]
 
     context = {
         "title": "Rost - Integration Tests"
@@ -44,7 +44,7 @@ def test_context(tmpdir):
 def test_contexts(tmpdir):
     searchpath = "{}/example/templates".format(os.path.abspath("."))
     outputpath = "{}/dist".format(tmpdir)
-    staticpaths=["static"]
+    staticpaths = ["static"]
 
     context = {
         "title": "Rost - Integration Tests"

@@ -6,7 +6,6 @@ import time
 import shutil
 import inspect
 
-import click
 from jinja2 import Environment, FileSystemLoader
 
 from .monitor import FileMonitor
