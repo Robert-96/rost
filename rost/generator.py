@@ -33,6 +33,7 @@ class Rost:
         self.outputpath = outputpath
         self.staticpaths = staticpaths or []
 
+        self.context = context or {}
         self.contexts = contexts or []
         self.merge_contexts = merge_contexts
 
@@ -67,7 +68,8 @@ class Rost:
             raise UnicodeError('Unable to decode {}: {}'.format(template_name, e))
 
     def get_context(self, template):
-        context = {}
+        context = self.context
+
         for regex, context_generator in self.contexts:
             if re.match(regex, template.name):
                 if inspect.isfunction(context_generator):
@@ -157,14 +159,14 @@ class Rost:
         if self.after_callback:
             self.after_callback(searchpath=self.searchpath, outputpath=self.outputpath)
 
-    def watch(self, monitorpaths=None):
+    def watch(self, monitorpaths=None, bind="localhost", port=8080):
         self.build()
 
         monitorpaths = monitorpaths or []
         reloader = FileMonitor([self.searchpath, *monitorpaths], self.build)
         reloader.start()
 
-        server = WebServer(directory=self.outputpath)
+        server = WebServer(bind=bind, port=port, directory=self.outputpath)
         server.start()
 
         try:

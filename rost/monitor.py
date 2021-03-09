@@ -14,7 +14,7 @@ class FileMonitor:
     def _handler(self, *args, **kwargs):
         self.callback()
 
-    def run(self):
+    def start(self):
         self.event_handler = LoggingEventHandler()
 
         self.event_handler.on_created = self._handler
@@ -27,14 +27,6 @@ class FileMonitor:
             self.observer.schedule(self.event_handler, path, recursive=True)
 
         self.observer.start()
-
-    def start(self):
-        click.secho("  Start monitoring:", bold=True, fg="bright_black")
-        for path in self.monitorpaths:
-            click.secho("   * {}".format(path), bold=True, fg="cyan")
-        click.echo()
-
-        self.run()
 
     def stop(self):
         self.observer.stop()

@@ -97,14 +97,34 @@ def watch(searchpath, outputpath, staticpaths):
     """Start an development server and re-build the project if the source directory for change."""
 
     def before_callback(*args, **kwargs):
+        click.echo()
         click.secho("  Build project...", bold=True, fg="bright_black")
 
     def after_callback(*args, **kwargs):
-        click.secho("   successfully build.\n", bold=True, fg="green")
+        click.secho("  Successfully build.\n", bold=True, fg="green")
+
+    monitorpaths = [searchpath]
+
+    click.secho("  Start monitoring:", bold=True, fg="bright_black")
+    for path in monitorpaths:
+        click.secho("   * {}".format(path), bold=True, fg="cyan")
+    click.echo()
+
+    bind = "localhost"
+    port = 8080
+    url = "http://{}:{}/".format(bind, port)
+
+    click.secho("  Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
+    click.secho("  Press Ctrl + C to stop...", bold=True, fg="bright_black")
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
                 before_callback=before_callback, after_callback=after_callback)
-    rost.watch()
+    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port)
+
+    click.secho()
+    click.secho("  Server closed.", bold=True, fg="bright_black")
+    click.secho("  File monitor closed.", bold=True, fg="bright_black")
+    click.secho()
 
 
 if __name__ == "__main__":
