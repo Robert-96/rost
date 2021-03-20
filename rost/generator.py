@@ -174,3 +174,23 @@ class Rost:
         except KeyboardInterrupt:
             reloader.stop()
             server.stop()
+
+
+def build(searchpath="templates", outputpath="dist", staticpaths=None, context=None, filters=None,
+          contexts=None, merge_contexts=False):
+    """Build the project."""
+
+    rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths, context=context, filters=filters,
+                contexts=contexts, merge_contexts=merge_contexts)
+
+    rost.build()
+
+
+def watch(searchpath="templates", outputpath="dist", staticpaths=None, monitorpaths=None, context=None, filters=None,
+          contexts=None, merge_contexts=False, bind="localhost", port=8080):
+    """Start an development server and re-build the project if the source directory for change."""
+
+    rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths, context=context, filters=filters,
+                contexts=contexts, merge_contexts=merge_contexts)
+
+    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port)

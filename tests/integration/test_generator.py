@@ -1,7 +1,7 @@
 import re
 import os.path
 
-from rost.generator import Rost
+from rost.generator import Rost, build
 
 
 def test_happy_flow(tmpdir):
@@ -11,6 +11,21 @@ def test_happy_flow(tmpdir):
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
     rost.build()
+
+    assert os.path.isdir(searchpath)
+    assert os.path.isdir(outputpath)
+    assert os.path.isfile("{}/index.html".format(outputpath))
+
+    for static in staticpaths:
+        assert os.path.exists("{}/{}".format(outputpath, static))
+
+
+def test_build(tmpdir):
+    searchpath = "{}/example/templates".format(os.path.abspath("."))
+    outputpath = "{}/dist".format(tmpdir)
+    staticpaths = ["static"]
+
+    build(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
 
     assert os.path.isdir(searchpath)
     assert os.path.isdir(outputpath)

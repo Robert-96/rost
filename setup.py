@@ -5,7 +5,7 @@ from rost.__version__ import VERSION
 
 NAME = 'rost'
 DESCRIPTION = 'A simple static site generator based on Jinja2 with a CLI build using Click.'
-KEYWORDS = 'HTML, Jija2, Click'
+KEYWORDS = 'HTML, Jinja2, Click'
 
 URL = 'https://github.com/Robert-96/rost'
 EMAIL = 'dezmereanrobert@gmail.com'
