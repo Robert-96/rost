@@ -147,6 +147,8 @@ class Rost:
             self.render_template(template)
 
     def build(self):
+        """Build the project."""
+
         self.clear_build()
 
         if self.before_callback:
@@ -159,6 +161,8 @@ class Rost:
             self.after_callback(searchpath=self.searchpath, outputpath=self.outputpath)
 
     def watch(self, monitorpaths=None, bind="localhost", port=8080):
+        """Start an development server and re-build the project if the source directory for change."""
+
         self.build()
 
         monitorpaths = monitorpaths or []

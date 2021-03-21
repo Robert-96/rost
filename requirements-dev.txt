@@ -3,3 +3,5 @@ pytest
 pytest-cov
 doc8
 sphinx
+sphinx-rtd-theme
+recommonmark

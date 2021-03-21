@@ -1,6 +1,6 @@
 # rost
 
-A simple static site generator based on Jinja2 with a command line interface build using Click.
+A simple static site generator based on [Jinja2](https://jinja.palletsprojects.com/en/2.11.x/) with a command line interface build using [Click](https://click.palletsprojects.com/en/7.x/).
 
 ## Installation
 
@@ -160,6 +160,12 @@ if __name__ == "__main__":
         filters=filters
     )
 
+```
+
+Then you can use them in your template as you would expect:
+
+```
+{{ 'World'|hello }}
 ```
 
 ## License
