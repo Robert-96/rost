@@ -37,14 +37,17 @@ class Rost:
             to all templates. Defaults to ``{}``.
         contexts (:obj:`list`, optional): A list of "regex, context" pairs. Each context is either a dictionary
             or a function that takes either no argument or or the current template as its sole argument and returns
-            a dictionary. The regex, if matched against a filename, will cause the context to be used. Defaults to ``[]``.
+            a dictionary. The regex, if matched against a filename, will cause the context to be used. Defaults to
+            ``[]``.
         merge_context (:obj:`bool`, optional): A boolean value. If set to ``True``, then all matching regex from the
             contexts list will be merged (in order) to get the final context. Otherwise, only the first matching regex
             is used. Defaults to ``False``.
         filters (:obj:`dict`, optional): A dictionary of Jinja2 filters to add to the Environment.  Defaults
             to ``{}``.
-        before_callback (:obj:`func`, optional): A callback function called before the project is build. Defaults to ``None``.
-        after_callback (:obj:`func`, optional): A callback function called after the project is build. Defaults to ``None``.
+        before_callback (:obj:`func`, optional): A callback function called before the project is build. Defaults to
+            ``None``.
+        after_callback (:obj:`func`, optional): A callback function called after the project is build. Defaults to
+            ``None``.
 
     """
 
