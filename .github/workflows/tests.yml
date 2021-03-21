@@ -28,6 +28,10 @@ jobs:
       run: |
        flake8 .
 
+    - name: Lint with doc8
+      run: |
+        doc8 docs
+
     - name: Test with pytest
       run: |
         pytest
