@@ -26,6 +26,12 @@ patterns.
    license
 
 
+.. toctree::
+    :caption: Useful Links:
+
+    Source Code <https://github.com/Robert-96/rost>
+
+
 Indices and tables
 ==================
 

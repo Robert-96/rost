@@ -57,6 +57,7 @@ argument to the ``build`` or ```watch`` functions.
     from rost import build
 
 
+    # A context that should be available all the time to all templates.
     context = {
         "title": "Rost Example"
     }
@@ -71,6 +72,7 @@ argument to the ``build`` or ```watch`` functions.
         )
 
 
+
 If you want to pass data to a specific template you can use the ``contexts``
 keyword argument off the ``build`` and ``watch`` functions.
 
@@ -81,17 +83,18 @@ keyword argument off the ``build`` and ``watch`` functions.
     from rost import build
 
 
-    # base context used for all templates
+    # A context that should be available all the time to all templates.
     context = {
         "title": "Rost Example"
     }
 
-    # template specific context
-    # keys - regex matching the template name
-    # values - the context for the template or group of templates
-    contexts = {
-        "*.html": {}
-    }
+    # A list of "regex, context" pairs. Each context is either a dictionary or a
+    # function that takes either no argument or or the current template as its sole
+    # argument and returns a dictionary. The regex, if matched against a filename,
+    # will cause the context to be used.
+    contexts = [
+        ("*.html", {}),
+    ]
 
 
     if __name__ == "__main__":
@@ -102,6 +105,8 @@ keyword argument off the ``build`` and ``watch`` functions.
             context=context,
             contexts=contexts
         )
+
+
 
 
 Custom Filters

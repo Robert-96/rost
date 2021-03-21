@@ -90,6 +90,7 @@ The simplest way to supply data to the template is to pass a mapping from variab
 from rost import build
 
 
+# A context that should be available all the time to all templates.
 context = {
     "title": "Rost Example"
 }
@@ -113,17 +114,18 @@ If you want to pass data to a specific template you can use the `contexts` keywo
 from rost import build
 
 
-# base context used for all templates
+# A context that should be available all the time to all templates.
 context = {
     "title": "Rost Example"
 }
 
-# template specific context
-# keys - regex matching the template name
-# values - the context for the template or group of templates
-contexts = {
-    "*.html": {}
-}
+# A list of "regex, context" pairs. Each context is either a dictionary or a
+# function that takes either no argument or or the current template as its sole
+# argument and returns a dictionary. The regex, if matched against a filename,
+# will cause the context to be used.
+contexts = [
+    ("*.html", {}),
+]
 
 
 if __name__ == "__main__":
