@@ -46,6 +46,10 @@ with your Python3 interpreter.
 Loading Data
 ============
 
+
+Global Context
+--------------
+
 The simplest way to supply data to the template is to pass a mapping from
 variable names to their values (a *“context”*) as the ``context`` keyword
 argument to the ``build`` or ```watch`` functions.
@@ -72,6 +76,8 @@ argument to the ``build`` or ```watch`` functions.
         )
 
 
+Template Specific Context
+-------------------------
 
 If you want to pass data to a specific template you can use the ``contexts``
 keyword argument off the ``build`` and ``watch`` functions.
@@ -107,6 +113,40 @@ keyword argument off the ``build`` and ``watch`` functions.
         )
 
 
+By default ``rost`` will use only the first matching context, if you want to use all matching
+contexts call the ``build`` or ``watch`` functions with the ``merge_contexts`` set to ``True``.
+
+.. code-block:: python
+
+    # build.py
+
+    from rost import build
+
+
+    # A context that should be available all the time to all templates.
+    context = {
+        "title": "Rost Example"
+    }
+
+    # A list of "regex, context" pairs. Each context is either a dictionary or a
+    # function that takes either no argument or or the current template as its sole
+    # argument and returns a dictionary. The regex, if matched against a filename,
+    # will cause the context to be used.
+    contexts = [
+        ("*.html", {}),
+        ("index.html", {})
+    ]
+
+
+    if __name__ == "__main__":
+        build(
+            searchpath="templates",
+            outputpath="dist",
+            staticpaths=["static"],
+            context=context,
+            contexts=contexts,
+            merge_contexts=True
+        )
 
 
 Custom Filters
@@ -122,7 +162,7 @@ Inside the templates variables can be modified by `filters <https://jinja.pallet
 
 
     filters = {
-        "hello": lambda x: "Hello, {}!"
+        "hello": lambda x: "Hello, {}!".format(x)
     }
 
 
@@ -135,7 +175,7 @@ Inside the templates variables can be modified by `filters <https://jinja.pallet
         )
 
 
-Then you can use them in your template as you would expect:
+Then you can use them in your templates as you would expect:
 
 .. code::
 

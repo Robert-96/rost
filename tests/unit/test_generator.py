@@ -40,7 +40,7 @@ def test_contexts():
     context = {"title": "Rost", "description": "..."}
     contexts = [
         ("index.html", {"title": "Rost > Unit Tests", "name": "Rost"}),
-        (".*.html", {"keywords": "HTML, Jija2, Click"})
+        (".*.html", {"keywords": "HTML, Jinja2, Click"})
     ]
 
     rost = Rost(context=context, contexts=contexts)

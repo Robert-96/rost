@@ -14,6 +14,11 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 
+from rost import build
+
+
+build(searchpath='../../example/templates/', outputpath='_static/dist', staticpaths=['static'])
+
 
 # -- Project information -----------------------------------------------------
 
@@ -63,9 +68,9 @@ html_static_path = ['_static']
 # directory) that is the favicon of the docs. Modern browsers use this as the icon for
 # tabs, windows and bookmarks. It should be a Windows-style icon file (.ico), which is
 # 16x16 or 32x32 pixels large.
-html_favicon = '_static/favicon.svg'
+html_favicon = '_static/icons/favicon.svg'
 
 # If given, this must be the name of an image file (path relative to the configuration
 # directory) that is the logo of the docs. It is placed at the top of the sidebar;
 # its width should therefore not exceed 200 pixels.
-html_logo = '_static/logo.svg'
+html_logo = '_static/icons/logo.svg'

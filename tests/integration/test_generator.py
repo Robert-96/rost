@@ -64,9 +64,12 @@ def test_contexts(tmpdir):
     context = {
         "title": "Rost - Integration Tests"
     }
+    contexts = [
+        ("index.html", context)
+    ]
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
-                contexts=[("index.html", context)])
+                contexts=contexts)
     rost.build()
 
     assert os.path.isfile("{}/index.html".format(outputpath))
@@ -74,4 +77,29 @@ def test_contexts(tmpdir):
         data = fp.read()
 
     match = re.search(r'<h1 id="title">Rost - Integration Tests</h1>', data)
+    assert match is not None
+
+
+def test_filters(tmpdir):
+    searchpath = "{}/tests/data/templates".format(os.path.abspath("."))
+    outputpath = "{}/dist".format(tmpdir)
+    staticpaths = ["static"]
+
+    context = {
+        "title": "Rost - Integration Tests"
+    }
+    filters = {
+        "hello": lambda x: "Hello, {}!".format(x)
+    }
+
+    rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
+                context=context, filters=filters)
+    rost.build()
+
+    assert os.path.isfile("{}/index.html".format(outputpath))
+    with open("{}/index.html".format(outputpath)) as fp:
+        data = fp.read()
+
+    print(data)
+    match = re.search(r'<h1 id="title">Hello, Rost - Integration Tests!</h1>', data)
     assert match is not None

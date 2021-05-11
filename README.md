@@ -150,7 +150,7 @@ from rost import build
 
 
 filters = {
-    "hello": lambda x: "Hello, {}!"
+    "hello": lambda x: "Hello, {}!".format(x)
 }
 
 
