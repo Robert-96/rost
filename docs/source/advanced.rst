@@ -113,8 +113,9 @@ keyword argument off the ``build`` and ``watch`` functions.
         )
 
 
-By default ``rost`` will use only the first matching context, if you want to use all matching
-contexts call the ``build`` or ``watch`` functions with the ``merge_contexts`` set to ``True``.
+By default ``rost`` will use only the first matching context, if you want to
+use all matching contexts call the ``build`` or ``watch`` functions with the
+``merge_contexts`` set to ``True``.
 
 .. code-block:: python
 
