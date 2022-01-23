@@ -1,10 +1,11 @@
-import threading
-
 from livereload import Server
 
 
 class LiveReloader:
-    """Creates an observer thread that is watching directories, refresh the browser using livereload and dispatches callback calls."""
+    """Creates an observer thread that is watching directories, refresh the browser using livereload and dispatches
+    callback calls.
+
+    """
 
     def __init__(self, outputpath, monitorpaths, callback, bind="localhost", port=5050):
         self.outputpath = outputpath
@@ -35,5 +36,5 @@ class LiveReloader:
 if __name__ == "__main__":
     import logging
 
-    reloader = LiveReloader(["dist"], lambda : logging.info("Callback called."))
+    reloader = LiveReloader(["dist"], lambda: logging.info("Callback called."))
     reloader.start()
