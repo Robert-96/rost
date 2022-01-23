@@ -10,7 +10,10 @@ class FileMonitor:
         self.callback = callback
 
     def _handler(self, *args, **kwargs):
-        self.callback()
+        try:
+            self.callback()
+        except Exception:
+            pass
 
     def start(self):
         self.event_handler = LoggingEventHandler()

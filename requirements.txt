@@ -2,3 +2,4 @@ click
 click_help_colors
 jinja2
 watchdog
+livereload

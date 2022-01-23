@@ -8,6 +8,7 @@ import inspect
 
 from jinja2 import Environment, FileSystemLoader
 
+from .livereloder import LiveReloader
 from .monitor import FileMonitor
 from .server import WebServer
 
@@ -17,6 +18,7 @@ def _has_argument(func):
 
     Args:
         func: The function to be tested for existence of an argument.
+
     """
 
     sig = inspect.signature(func)
@@ -118,6 +120,7 @@ class Rost:
 
         Args:
             template_name: A string representing the name of the file to check.
+
         """
 
         return any(template_name.startswith(path) for path in self.staticpaths)
@@ -127,6 +130,7 @@ class Rost:
 
         Args:
             template_name: A string representing the name of the file to check.
+
         """
 
         return any((path.startswith("_") for path in template_name.split("/")))
@@ -136,6 +140,7 @@ class Rost:
 
         Args:
             template_name: A string representing the name of the file to check.
+
         """
 
         return any((path.startswith(".") for path in template_name.split("/")))
@@ -200,17 +205,27 @@ class Rost:
         if self.after_callback:
             self.after_callback(searchpath=self.searchpath, outputpath=self.outputpath)
 
-    def watch(self, monitorpaths=None, bind="localhost", port=8080):
+    def watch(self, monitorpaths=None, bind="localhost", port=8080, livereload=False):
         """Start an development server and re-build the project if the source directory for change.
 
         Args:
             bind (:obj:`str`, optional): A string representing the bind address. Defaults to ``'localhost'``.
             port (:obj:`int`, optional): A int representing the port. Defaults to ``8080``.
+
         """
 
-        self.build()
+        try:
+            self.build()
+        except Exception as error:
+            print(error)
 
         monitorpaths = monitorpaths or []
+
+        if livereload:
+            reloader = LiveReloader(self.outputpath, [self.searchpath, *monitorpaths], self.build, bind=bind, port=port)
+            reloader.start()
+            return
+
         reloader = FileMonitor([self.searchpath, *monitorpaths], self.build)
         reloader.start()
 
@@ -221,8 +236,8 @@ class Rost:
             while True:
                 time.sleep(0.1)
         except KeyboardInterrupt:
-            reloader.stop()
             server.stop()
+            reloader.stop()
 
 
 def build(searchpath="templates", outputpath="dist", staticpaths=None, context=None, filters=None,
@@ -230,6 +245,7 @@ def build(searchpath="templates", outputpath="dist", staticpaths=None, context=N
     """Build the project.
 
     Optional keyword arguments correspond to the instance attributes of ``Rost``.
+
     """
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths, context=context, filters=filters,
@@ -239,13 +255,14 @@ def build(searchpath="templates", outputpath="dist", staticpaths=None, context=N
 
 
 def watch(searchpath="templates", outputpath="dist", staticpaths=None, monitorpaths=None, context=None, filters=None,
-          contexts=None, merge_contexts=False, bind="localhost", port=8080):
+          contexts=None, merge_contexts=False, bind="localhost", port=8080, livereload=False):
     """Start an development server and re-build the project if the source directory for change.
 
     Optional keyword arguments correspond to the instance attributes of ``Rost``.
+
     """
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths, context=context, filters=filters,
                 contexts=contexts, merge_contexts=merge_contexts)
 
-    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port)
+    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, livereload=livereload)
