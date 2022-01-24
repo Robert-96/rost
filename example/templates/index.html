@@ -5,15 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Rost | Example</title>
+  <link rel="icon" type="image/svg+xml" href="static/icons/favicon.svg">
 
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="static/css/style.css">
 </head>
-<body class="bg-gray text-white">
+<body class="text-violet-100 font-sans leading-tight antialiased">
 
   {% import 'components/_utils.html' as utils %}
 
-  {% include 'components/_title.html' %}
-  {% include 'components/_content.html' %}
-
+  <div class="p-10">
+    {% include 'components/_title.html' %}
+    {% include 'components/_content.html' %}
+  </div>
 </body>
 </html>
