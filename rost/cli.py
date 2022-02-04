@@ -31,17 +31,20 @@ CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 searchpath = click.option(
     "--searchpath", type=click.Path(exists=True, file_okay=False),
     default="templates/", show_default=True,
-    help="The directory to look in for templates.")
+    help="The directory to look in for templates."
+)
 
 outputpath = click.option(
     "--outputpath", type=click.Path(exists=False, file_okay=False),
     default="dist/", show_default=True,
-    help="The directory to place rendered files in.")
+    help="The directory to place rendered files in."
+)
 
 staticpath = click.option(
     "--staticpath", "staticpaths", type=click.Path(exists=False),
     default=("static/", ), show_default=True, multiple=True,
-    help="The directory (or directories) within searchpath where static files (such as CSS and JavaScript) are stored.")
+    help="The directory (or directories) within searchpath where static files (such as CSS and JavaScript) are stored."
+)
 
 livereload = click.option(
     "--livereload/--no-livereload", is_flag=True, default=False, show_default=True,
@@ -99,7 +102,7 @@ def build(searchpath, outputpath, staticpaths):
     staticpath,
     livereload
 ])
-def watch(searchpath, outputpath, staticpaths, livereload):
+def watch(searchpath, outputpath, staticpaths, use_livereload):
     """Start an development server and re-build the project if the source directory for change."""
 
     def before_callback(*args, **kwargs):
@@ -125,7 +128,7 @@ def watch(searchpath, outputpath, staticpaths, livereload):
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
                 before_callback=before_callback, after_callback=after_callback)
-    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, livereload=livereload)
+    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, use_livereload=use_livereload)
 
     click.secho()
     click.secho("  Server closed.", bold=True, fg="bright_black")

@@ -2,15 +2,14 @@
 
 import os
 import re
-import time
 import shutil
 import inspect
 
 from jinja2 import Environment, FileSystemLoader
 
-from .livereloder import LiveReloader
 from .monitor import FileMonitor
 from .server import WebServer
+from .reloder import LiveReloader
 
 
 def _has_argument(func):
@@ -23,6 +22,19 @@ def _has_argument(func):
 
     sig = inspect.signature(func)
     return bool(sig.parameters)
+
+
+def _get_services(monitorpaths, callback, root=".", bind="localhost", port=8080, use_livereload=False):
+    """Return a tuple containing the FileMonitor and WebServer services."""
+
+    if use_livereload:
+        livereloder = LiveReloader(monitorpaths, callback, root=root, bind=bind, port=port)
+        return livereloder, livereloder
+
+    monitor = FileMonitor(monitorpaths, callback)
+    server = WebServer(root=root, bind=bind, port=port)
+
+    return monitor, server
 
 
 class Rost:
@@ -76,7 +88,7 @@ class Rost:
         self.env.filters.update(self.filters)
 
     def __repr__(self):
-        return "{}('{}', '{}')".format(type(self).__name__, self.searchpath, self.outputpath)
+        return "{}({!r}, {!r})".format(type(self).__name__, self.searchpath, self.outputpath)
 
     @property
     def template_names(self):
@@ -205,7 +217,7 @@ class Rost:
         if self.after_callback:
             self.after_callback(searchpath=self.searchpath, outputpath=self.outputpath)
 
-    def watch(self, monitorpaths=None, bind="localhost", port=8080, livereload=False):
+    def watch(self, monitorpaths=None, bind="localhost", port=8080, use_livereload=False):
         """Start an development server and re-build the project if the source directory for change.
 
         Args:
@@ -220,24 +232,22 @@ class Rost:
             print(error)
 
         monitorpaths = monitorpaths or []
+        monitorpaths = [self.searchpath, *self.staticpaths, *monitorpaths]
 
-        if livereload:
-            reloader = LiveReloader(self.outputpath, [self.searchpath, *monitorpaths], self.build, bind=bind, port=port)
-            reloader.start()
-            return
+        monitor, server = _get_services(
+            monitorpaths, self.build,
+            root=self.outputpath,
+            bind=bind,
+            port=port,
+            use_livereload=use_livereload
+        )
 
-        reloader = FileMonitor([self.searchpath, *monitorpaths], self.build)
-        reloader.start()
-
-        server = WebServer(bind=bind, port=port, directory=self.outputpath)
-        server.start()
+        monitor.start()
 
         try:
-            while True:
-                time.sleep(0.1)
+            server.serve()
         except KeyboardInterrupt:
-            server.stop()
-            reloader.stop()
+            monitor.stop()
 
 
 def build(searchpath="templates", outputpath="dist", staticpaths=None, context=None, filters=None,
@@ -255,7 +265,7 @@ def build(searchpath="templates", outputpath="dist", staticpaths=None, context=N
 
 
 def watch(searchpath="templates", outputpath="dist", staticpaths=None, monitorpaths=None, context=None, filters=None,
-          contexts=None, merge_contexts=False, bind="localhost", port=8080, livereload=False):
+          contexts=None, merge_contexts=False, bind="localhost", port=8080, use_livereload=False):
     """Start an development server and re-build the project if the source directory for change.
 
     Optional keyword arguments correspond to the instance attributes of ``Rost``.
@@ -265,4 +275,4 @@ def watch(searchpath="templates", outputpath="dist", staticpaths=None, monitorpa
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths, context=context, filters=filters,
                 contexts=contexts, merge_contexts=merge_contexts)
 
-    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, livereload=livereload)
+    rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, use_livereload=use_livereload)

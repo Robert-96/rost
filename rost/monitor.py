@@ -9,13 +9,18 @@ class FileMonitor:
         self.monitorpaths = monitorpaths
         self.callback = callback
 
-    def _handler(self, *args, **kwargs):
+    def __repr__(self):
+        return "{}({!r}, {!r})".format(type(self).__name__, self.monitorpaths, self.callback)
+
+    def _handler(self):
         try:
             self.callback()
         except Exception:
             pass
 
     def start(self):
+        """Start the file monitor service."""
+
         self.event_handler = LoggingEventHandler()
 
         self.event_handler.on_created = self._handler
@@ -30,5 +35,21 @@ class FileMonitor:
         self.observer.start()
 
     def stop(self):
+        """Stops the file monitor service."""
+
         self.observer.stop()
         self.observer.join()
+
+
+if __name__ == "__main__":
+    import logging
+    import time
+
+    monitor = FileMonitor(["dist"], lambda: logging.info("Callback called."))
+    monitor.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        monitor.stop()
