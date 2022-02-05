@@ -62,4 +62,4 @@ jobs:
     - name: Build the example
       run: |
         cd example
-        rost build --searchpath templates --outputpath dist --staticpath static/css --staticpath static/js
+        rost build --searchpath templates --outputpath dist --staticpath static/css --staticpath static/js --staticpath static/icons
