@@ -8,3 +8,4 @@ doc8
 sphinx
 sphinx-rtd-theme
 recommonmark
+requests

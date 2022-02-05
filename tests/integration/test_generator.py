@@ -1,55 +1,61 @@
 import re
+from pathlib import Path
 import os.path
 
 from rost.generator import Rost, build
 
 
 def test_happy_flow(tmpdir):
-    searchpath = "{}/example/templates".format(os.path.abspath("."))
-    outputpath = "{}/dist".format(tmpdir)
+    searchpath = Path(".", "example", "templates")
+    outputpath = Path(tmpdir, "dist")
     staticpaths = ["static"]
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
     rost.build()
 
-    assert os.path.isdir(searchpath)
-    assert os.path.isdir(outputpath)
-    assert os.path.isfile("{}/index.html".format(outputpath))
+    assert searchpath.is_dir()
+    assert outputpath.is_dir()
+    assert Path(outputpath, "index.html").is_file()
 
     for static in staticpaths:
-        assert os.path.exists("{}/{}".format(outputpath, static))
+        assert Path(outputpath, static).exists()
 
 
 def test_build(tmpdir):
-    searchpath = "{}/example/templates".format(os.path.abspath("."))
-    outputpath = "{}/dist".format(tmpdir)
+    searchpath = Path(".", "example", "templates")
+    outputpath = Path(tmpdir, "dist")
     staticpaths = ["static"]
 
     build(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths)
 
-    assert os.path.isdir(searchpath)
-    assert os.path.isdir(outputpath)
-    assert os.path.isfile("{}/index.html".format(outputpath))
+    assert searchpath.is_dir()
+    assert outputpath.is_dir()
+    assert Path(outputpath, "index.html").is_file()
 
     for static in staticpaths:
-        assert os.path.exists("{}/{}".format(outputpath, static))
+        assert Path(outputpath, static).exists()
 
 
 def test_context(tmpdir):
-    searchpath = "{}/example/templates".format(os.path.abspath("."))
-    outputpath = "{}/dist".format(tmpdir)
+    searchpath = Path(".", "tests", "data", "templates")
+    outputpath = Path(tmpdir, "dist")
     staticpaths = ["static"]
 
     context = {
         "title": "Rost - Integration Tests"
     }
+    filters = {
+        "hello": lambda x: x
+    }
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
-                context=context)
+                context=context, filters=filters)
     rost.build()
 
-    assert os.path.isfile("{}/index.html".format(outputpath))
-    with open("{}/index.html".format(outputpath)) as fp:
+    index = Path(outputpath, "index.html")
+    assert index.is_file()
+
+    with open(index) as fp:
         data = fp.read()
 
     match = re.search(r'<h1 id="title">Rost - Integration Tests</h1>', data)
@@ -57,10 +63,13 @@ def test_context(tmpdir):
 
 
 def test_contexts(tmpdir):
-    searchpath = "{}/example/templates".format(os.path.abspath("."))
-    outputpath = "{}/dist".format(tmpdir)
+    searchpath = Path(".", "tests", "data", "templates")
+    outputpath = Path(tmpdir, "dist")
     staticpaths = ["static"]
 
+    filters = {
+        "hello": lambda x: x
+    }
     context = {
         "title": "Rost - Integration Tests"
     }
@@ -69,11 +78,13 @@ def test_contexts(tmpdir):
     ]
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
-                contexts=contexts)
+                contexts=contexts, filters=filters)
     rost.build()
 
-    assert os.path.isfile("{}/index.html".format(outputpath))
-    with open("{}/index.html".format(outputpath)) as fp:
+    index = Path(outputpath, "index.html")
+    assert index.is_file()
+
+    with open(index) as fp:
         data = fp.read()
 
     match = re.search(r'<h1 id="title">Rost - Integration Tests</h1>', data)
@@ -81,8 +92,8 @@ def test_contexts(tmpdir):
 
 
 def test_filters(tmpdir):
-    searchpath = "{}/tests/data/templates".format(os.path.abspath("."))
-    outputpath = "{}/dist".format(tmpdir)
+    searchpath = Path(".", "tests", "data", "templates")
+    outputpath = Path(tmpdir, "dist")
     staticpaths = ["static"]
 
     context = {
@@ -96,10 +107,11 @@ def test_filters(tmpdir):
                 context=context, filters=filters)
     rost.build()
 
-    assert os.path.isfile("{}/index.html".format(outputpath))
-    with open("{}/index.html".format(outputpath)) as fp:
+    index = Path(outputpath, "index.html")
+    assert index.is_file()
+
+    with open(index) as fp:
         data = fp.read()
 
-    print(data)
     match = re.search(r'<h1 id="title">Hello, Rost - Integration Tests!</h1>', data)
     assert match is not None

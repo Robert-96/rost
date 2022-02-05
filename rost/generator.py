@@ -4,12 +4,16 @@ import os
 import re
 import shutil
 import inspect
+import logging
 
 from jinja2 import Environment, FileSystemLoader
 
 from .monitor import FileMonitor
 from .server import WebServer
 from .reloder import LiveReloader
+
+
+logger = logging.getLogger(__name__)
 
 
 def _has_argument(func):
@@ -88,7 +92,7 @@ class Rost:
         self.env.filters.update(self.filters)
 
     def __repr__(self):
-        return "{}({!r}, {!r})".format(type(self).__name__, self.searchpath, self.outputpath)
+        return "{}({!r}, {!r}, {!r})".format(type(self).__name__, self.searchpath, self.outputpath, self.staticpaths)
 
     @property
     def template_names(self):
@@ -102,8 +106,8 @@ class Rost:
     def get_template(self, template_name):
         try:
             return self.env.get_template(template_name)
-        except UnicodeDecodeError as e:
-            raise UnicodeError('Unable to decode {}: {}'.format(template_name, e))
+        except UnicodeDecodeError as error:
+            raise UnicodeError('Unable to decode {}: {}'.format(template_name, error)) from error
 
     def get_context(self, template):
         context = self.context
@@ -221,15 +225,17 @@ class Rost:
         """Start an development server and re-build the project if the source directory for change.
 
         Args:
+            monitorpaths (:obj:`list` of :obj:`Paths`, optional): A list of paths to monitor. Defaults to ``None``.
             bind (:obj:`str`, optional): A string representing the bind address. Defaults to ``'localhost'``.
             port (:obj:`int`, optional): A int representing the port. Defaults to ``8080``.
+            use_livereload (:obj:`bool`, optional): If set to true will use the liverload server. Defaults to ``False``.
 
         """
 
         try:
             self.build()
         except Exception as error:
-            print(error)
+            logger.error("Unexpected error occurred while building: {!r}.".format(self))
 
         monitorpaths = monitorpaths or []
         monitorpaths = [self.searchpath, *self.staticpaths, *monitorpaths]

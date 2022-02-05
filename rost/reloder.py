@@ -1,14 +1,24 @@
+import logging
+
 from livereload import Server
+
+
+logger = logging.getLogger(__name__)
 
 
 class LiveReloader:
     """Initialize a livereload server and watch file changes.
 
     Args:
+        monitorpaths (:obj:`list`): A list of paths to monitor.
+        callback (:obj:`callable`): A callable to call when a file from ``monitorpaths`` changes.
+        root (optional, :obj:`str` or :obj:`Path`): Defaults to ``.``.
+        bind (optional, :obj:`str`): Defaults to ``localhost``.
+        port (optional, :obj:`int`): Defaults to ``8080``.
 
     """
 
-    def __init__(self, monitorpaths, callback, root=".", bind="localhost", port=5050):
+    def __init__(self, monitorpaths, callback, root=".", bind="localhost", port=8080):
         self.monitorpaths = monitorpaths
         self.callback = callback
 
@@ -27,10 +37,12 @@ class LiveReloader:
         )
 
     def _handler(self):
+        logger.info("Handler called.")
+
         try:
             self.callback()
         except Exception:
-            pass
+            logger.error("Unexpected error occurred while calling the callback function.")
 
     def serve(self):
         server = Server()
@@ -38,13 +50,14 @@ class LiveReloader:
         for path in self.monitorpaths:
             server.watch(path, self._handler)
 
+        logger.info("Serving on http//{}:{}/".format(self.bind, self.port))
         server.serve(host=self.bind, port=self.port, root=self.root)
 
     def start(self):
-        pass
+        """This methods does't do anything. It's only propose is to comform with the Monitor interface."""
 
     def stop(self):
-        pass
+        """This methods does't do anything. It's only propose is to comform with the Monitor interface."""
 
 
 if __name__ == "__main__":

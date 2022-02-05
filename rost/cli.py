@@ -28,26 +28,26 @@ ASCI_ART = """\
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
 
-searchpath = click.option(
+searchpath_option = click.option(
     "--searchpath", type=click.Path(exists=True, file_okay=False),
     default="templates/", show_default=True,
     help="The directory to look in for templates."
 )
 
-outputpath = click.option(
+outputpath_option = click.option(
     "--outputpath", type=click.Path(exists=False, file_okay=False),
     default="dist/", show_default=True,
     help="The directory to place rendered files in."
 )
 
-staticpath = click.option(
+staticpath_option = click.option(
     "--staticpath", "staticpaths", type=click.Path(exists=False),
     default=("static/", ), show_default=True, multiple=True,
     help="The directory (or directories) within searchpath where static files (such as CSS and JavaScript) are stored."
 )
 
-livereload = click.option(
-    "--livereload/--no-livereload", is_flag=True, default=False, show_default=True,
+livereload_option = click.option(
+    "--livereload/--no-livereload", "use_livereload", is_flag=True, default=False, show_default=True,
     help="If set will start a livereload server."
 )
 
@@ -75,9 +75,9 @@ def cli():
 
 @cli.command()
 @add_options([
-    searchpath,
-    outputpath,
-    staticpath
+    searchpath_option,
+    outputpath_option,
+    staticpath_option
 ])
 def build(searchpath, outputpath, staticpaths):
     """Build the project."""
@@ -97,42 +97,43 @@ def build(searchpath, outputpath, staticpaths):
 
 @cli.command()
 @add_options([
-    searchpath,
-    outputpath,
-    staticpath,
-    livereload
+    searchpath_option,
+    outputpath_option,
+    staticpath_option,
+    livereload_option
 ])
 def watch(searchpath, outputpath, staticpaths, use_livereload):
     """Start an development server and re-build the project if the source directory for change."""
 
-    def before_callback(*args, **kwargs):
-        click.echo()
-        click.secho("  Build project...", bold=True, fg="bright_black")
+    def before_callback(**kwargs):
+        click.secho()
+        click.secho(">>> Build project...", bold=True, fg="bright_black")
 
-    def after_callback(*args, **kwargs):
-        click.secho("  Successfully build.\n", bold=True, fg="green")
+    def after_callback(**kwargs):
+        click.secho(">>> Successfully build.", bold=True, fg="green")
+        click.secho()
 
     monitorpaths = [searchpath]
 
-    click.secho("  Start monitoring:", bold=True, fg="bright_black")
+    click.secho(">>> Start monitoring:", bold=True, fg="bright_black")
     for path in monitorpaths:
-        click.secho("   * {}".format(path), bold=True, fg="cyan")
+        click.secho("     * {}".format(path), bold=True, fg="cyan")
     click.echo()
 
     bind = "localhost"
     port = 8080
     url = "http://{}:{}/".format(bind, port)
 
-    click.secho("  Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
-    click.secho("  Press Ctrl + C to stop...", bold=True, fg="bright_black")
+    click.secho(">>> Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
+    click.secho(">>> Press Ctrl + C to stop...", bold=True, fg="bright_black")
 
     rost = Rost(searchpath=searchpath, outputpath=outputpath, staticpaths=staticpaths,
                 before_callback=before_callback, after_callback=after_callback)
     rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, use_livereload=use_livereload)
 
     click.secho()
-    click.secho("  Server closed.", bold=True, fg="bright_black")
-    click.secho("  File monitor closed.", bold=True, fg="bright_black")
+    click.secho(">>> Server closed.", bold=True, fg="bright_black")
+    click.secho(">>> File monitor closed.", bold=True, fg="bright_black")
     click.secho()
 
 
