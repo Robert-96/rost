@@ -1,6 +1,5 @@
 import re
 from pathlib import Path
-import os.path
 
 from rost.generator import Rost, build
 
