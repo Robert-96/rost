@@ -234,7 +234,7 @@ class Rost:
 
         try:
             self.build()
-        except Exception as error:
+        except Exception:
             logger.error("Unexpected error occurred while building: {!r}.".format(self))
 
         monitorpaths = monitorpaths or []
