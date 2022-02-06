@@ -16,7 +16,7 @@ def test_happy_flow(tmpdir):
     bind = "localhost"
     port = 5005
 
-    server = WebServer(root=tmpdir, bind=bind, port=port)
+    server = WebServer(root=str(tmpdir), bind=bind, port=port)
 
     thread = threading.Thread(target=server.serve, daemon=True)
     thread.start()

@@ -106,12 +106,12 @@ def watch(searchpath, outputpath, staticpaths, use_livereload):
     """Start an development server and re-build the project if the source directory for change."""
 
     def before_callback(**kwargs):
-        click.secho()
+        click.echo()
         click.secho(">>> Build project...", bold=True, fg="bright_black")
 
     def after_callback(**kwargs):
         click.secho(">>> Successfully build.", bold=True, fg="green")
-        click.secho()
+        click.echo()
 
     monitorpaths = [searchpath]
 
@@ -132,10 +132,10 @@ def watch(searchpath, outputpath, staticpaths, use_livereload):
                 before_callback=before_callback, after_callback=after_callback)
     rost.watch(monitorpaths=monitorpaths, bind=bind, port=port, use_livereload=use_livereload)
 
-    click.secho()
+    click.echo()
     click.secho(">>> Server closed.", bold=True, fg="bright_black")
     click.secho(">>> File monitor closed.", bold=True, fg="bright_black")
-    click.secho()
+    click.echo()
 
 
 if __name__ == "__main__":
