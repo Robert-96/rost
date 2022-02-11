@@ -42,7 +42,7 @@ class LiveReloader:
         try:
             self.callback()
         except Exception:
-            logger.error("Unexpected error occurred while calling the callback function.")
+            logger.exception("Unexpected error occurred while calling the callback function.")
 
     def serve(self):
         server = Server()
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     import logging
 
     reloader = LiveReloader(["dist"], lambda: logging.info("Callback called."))
-    reloader.start()
+    reloader.serve()

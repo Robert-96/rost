@@ -114,16 +114,15 @@ def watch(searchpath, outputpath, staticpaths, use_livereload):
         click.echo()
 
     monitorpaths = [searchpath]
+    bind = "localhost"
+    port = 8080
+    url = "http://{}:{}/".format(bind, port)
 
     click.echo("    Searchpath:   {}".format(click.style(searchpath, fg="blue", bold=True)))
     click.echo("    Outputpath:   {}".format(click.style(outputpath, fg="blue", bold=True)))
     click.echo("    Staticpaths:  {}".format(", ".join([click.style(p, fg="blue", bold=True) for p in staticpaths])))
     click.echo("    Monitorpaths: {}".format(", ".join([click.style(p, fg="blue", bold=True) for p in monitorpaths])))
     click.echo()
-
-    bind = "localhost"
-    port = 8080
-    url = "http://{}:{}/".format(bind, port)
 
     click.secho(">>> Serving on {}".format(click.style(url, fg="cyan")), bold=True, fg="bright_black")
     click.secho(">>> Press Ctrl + C to stop...", bold=True, fg="bright_black")

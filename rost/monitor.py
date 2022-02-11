@@ -31,7 +31,7 @@ class FileMonitor:
         try:
             self.callback()
         except Exception:
-            logger.error("Unexpected error occurred while calling the callback function.")
+            logger.exception("Unexpected error occurred while calling the callback function.")
 
     def start(self):
         """Start the file monitor service."""

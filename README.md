@@ -1,6 +1,6 @@
 # rost
 
-A simple static site generator based on [Jinja2](https://jinja.palletsprojects.com/en/2.11.x/) with a command line interface build using [Click](https://click.palletsprojects.com/en/7.x/).
+A simple static site generator based on [Jinja2](https://jinja.palletsprojects.com/) with a command line interface build using [Click](https://click.palletsprojects.com/).
 
 ## Installation
 
@@ -22,7 +22,7 @@ $ python3 -m pip install -U git+https://github.com/Robert-96/rost.git
 
 If you’re just looking to render simple data-less templates, you can get up and running with the command line:
 
-```
+```console
 $ rost build
 ```
 
@@ -30,7 +30,7 @@ This will recursively search `./templates` for templates (any file whose name do
 
 To monitor your source directory for changes, recompile files if they change, and start a webserver use watch:
 
-```
+```console
 $ rost watch
 ```
 
@@ -42,7 +42,7 @@ The `build` and `watch` each take these common options:
 
 Getting help on version, available commands, arguments or option names:
 
-```
+```console
 $ rost --version
 $ rost --help
 $ rost build --help
@@ -59,7 +59,7 @@ The command line shortcut is convenient, but sometimes your project needs someth
 
 A minimal build script looks something like this:
 
-```py
+```python
 # build.py
 
 from rost import build
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
 Finally, just save the script as build.py (or something similar) and run it with your Python3 interpreter.
 
-```
+```console
 $ python3 build.py
 ```
 
@@ -84,7 +84,7 @@ $ python3 build.py
 
 The simplest way to supply data to the template is to pass a mapping from variable names to their values (a *“context”*) as the `context` keyword argument to the `build` or `watch` functions.
 
-```py
+```python
 # build.py
 
 from rost import build
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
 If you want to pass data to a specific template you can use the `contexts` keyword argument off the `build` and `watch` functions.
 
-```py
+```python
 # build.py
 
 from rost import build
@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
 Inside the templates variables can be modified by [filters](https://jinja.palletsprojects.com/en/2.11.x/templates/#filters). All the standard Jinja2 filters are supported (you can found the full list [here](https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters)). To add your own filters, simply pass your as the `filters` keyword argument to the `build` and `watch` functions.
 
-```py
+```python
 # build.py
 
 from rost import build
