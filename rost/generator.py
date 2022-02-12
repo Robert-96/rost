@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from .monitor import FileMonitor
 from .server import WebServer
-from .reloder import LiveReloader
+from .reloader import LiveReloader
 
 
 logger = logging.getLogger(__name__)
