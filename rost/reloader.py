@@ -57,10 +57,16 @@ class LiveReloader:
         server.serve(host=self.bind, port=self.port, root=self.root)
 
     def start(self):
-        """This methods does't do anything. It's only propose is to comform with the Monitor interface."""
+        """This methods does't do anything. It's only propose is to comform with the Monitor interface.
+
+        The serve methods also starts the observer thread that is watching the provided directories.
+        """
 
     def stop(self):
-        """This methods does't do anything. It's only propose is to comform with the Monitor interface."""
+        """This methods does't do anything. It's only propose is to comform with the Monitor interface.
+
+        Stoping the server will stop the observer thread that is watching the provided directories.
+        """
 
 
 if __name__ == "__main__":
