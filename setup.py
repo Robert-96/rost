@@ -10,7 +10,7 @@ KEYWORDS = 'HTML, Jinja2, Click'
 URL = 'https://github.com/Robert-96/rost'
 EMAIL = 'dezmereanrobert@gmail.com'
 AUTHOR = 'Robert-96'
-REQUIRES_PYTHON = '>=3.4.0'
+REQUIRES_PYTHON = '>=3.7.0'
 LICENSE = 'MIT'
 
 PROJECT_URLS = {
