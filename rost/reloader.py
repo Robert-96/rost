@@ -12,7 +12,8 @@ class LiveReloader:
     Args:
         monitorpaths (:obj:`list` of :obj:`Path`): A list of paths to monitor.
         callback (:obj:`callable`): A callable to call when a file from ``monitorpaths`` changes.
-        root (:obj:`str` or :obj:`Path`, optional): A directory relative to which it should serve the files. Defaults to ``.``.
+        root (:obj:`str` or :obj:`Path`, optional): A directory relative to which it should serve the files.
+            Defaults to ``.``.
         bind (:obj:`str`, optional): A specific address to which the server should bind. Defaults to ``localhost``.
         port (:obj:`int`, optional): A specific port to which the server should lissen. Defaults to ``8080``.
 

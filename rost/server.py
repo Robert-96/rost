@@ -11,7 +11,8 @@ class WebServer:
     if directory is not provided, directly mapping the directory structure to HTTP requests.
 
     Args:
-        root (:obj:`str` or :obj:`Path`, optional): A directory relative to which it should serve the files. Defaults to ``.``.
+        root (:obj:`str` or :obj:`Path`, optional): A directory relative to which it should serve the files.
+            Defaults to ``.``.
         bind (:obj:`str`, optional): A specific address to which the server should bind. Defaults to ``localhost``.
         port (:obj:`int`, optional): A specific port to which the server should lissen. Defaults to ``8080``.
 
