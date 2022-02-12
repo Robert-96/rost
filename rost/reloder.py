@@ -10,11 +10,11 @@ class LiveReloader:
     """Initialize a livereload server and watch file changes.
 
     Args:
-        monitorpaths (:obj:`list`): A list of paths to monitor.
+        monitorpaths (:obj:`list` of :obj:`Path`): A list of paths to monitor.
         callback (:obj:`callable`): A callable to call when a file from ``monitorpaths`` changes.
-        root (optional, :obj:`str` or :obj:`Path`): Defaults to ``.``.
-        bind (optional, :obj:`str`): Defaults to ``localhost``.
-        port (optional, :obj:`int`): Defaults to ``8080``.
+        root (:obj:`str` or :obj:`Path`, optional): A directory relative to which it should serve the files. Defaults to ``.``.
+        bind (:obj:`str`, optional): A specific address to which the server should bind. Defaults to ``localhost``.
+        port (:obj:`int`, optional): A specific port to which the server should lissen. Defaults to ``8080``.
 
     """
 
@@ -45,6 +45,8 @@ class LiveReloader:
             logger.exception("Unexpected error occurred while calling the callback function.")
 
     def serve(self):
+        """Start the server."""
+
         server = Server()
 
         for path in self.monitorpaths:
