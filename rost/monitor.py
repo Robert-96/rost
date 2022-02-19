@@ -11,7 +11,7 @@ class FileMonitor:
     """This class creates an observer thread that is watching the provided directories and dispatches callback calls.
 
     Args:
-        monitorpaths (:obj:`list` of :obs:`Path`): A list of paths to monitor.
+        monitorpaths (:obj:`list` of :obj:`Path`): A list of paths to monitor.
         callback (:obj:`callable`): A callable to call when a file from ``monitorpaths`` changes.
 
     """

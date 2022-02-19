@@ -51,6 +51,16 @@ livereload_option = click.option(
     help="If set will start a livereload server."
 )
 
+bind_option = click.option(
+    "--bind", "-b", default="localhost", show_default=True,
+    help="The address to which the server should bind."
+)
+
+port_option = click.option(
+    "--port", "-p", default=8080, show_default=True,
+    help="The port to which the server should lissen."
+)
+
 
 def add_options(options):
     def _add_options(func):
@@ -100,9 +110,11 @@ def build(searchpath, outputpath, staticpaths):
     searchpath_option,
     outputpath_option,
     staticpath_option,
+    bind_option,
+    port_option,
     livereload_option
 ])
-def watch(searchpath, outputpath, staticpaths, use_livereload):
+def watch(searchpath, outputpath, staticpaths, bind, port, use_livereload):
     """Start an development server and re-build the project if the source directory for change."""
 
     def before_callback(**kwargs):
@@ -114,8 +126,6 @@ def watch(searchpath, outputpath, staticpaths, use_livereload):
         click.echo()
 
     monitorpaths = [searchpath]
-    bind = "localhost"
-    port = 8080
     url = "http://{}:{}/".format(bind, port)
 
     click.echo("    Searchpath:   {}".format(click.style(searchpath, fg="blue", bold=True)))
