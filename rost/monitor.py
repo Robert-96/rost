@@ -34,23 +34,26 @@ class FileMonitor:
             logger.exception("Unexpected error occurred while calling the callback function.")
 
     def start(self):
-        """Start the file monitor service."""
+        """Starts the file monitoring service."""
+
+        logger.info("Start the file monitoring service.")
 
         event_handler = LoggingEventHandler()
-
         event_handler.on_created = self._handler
         event_handler.on_deleted = self._handler
         event_handler.on_modified = self._handler
 
         self.observer = Observer()
-
         for path in self.monitorpaths:
+            logger.info("Watching {!r} for changes...".format(self.searchpath))
             self.observer.schedule(event_handler, path, recursive=True)
 
         self.observer.start()
 
     def stop(self):
         """Stops the file monitor service."""
+
+        logger.info("Stop the file monitoring service.")
 
         if self.observer:
             self.observer.stop()

@@ -198,6 +198,8 @@ class Rost:
     def render_template(self, template):
         """Render a Jinja2 template."""
 
+        logger.info("Rendering {}...".format(template.name))
+
         filepath = os.path.join(self.outputpath, template.name)
         template.stream(self.get_context(template)).dump(filepath)
 

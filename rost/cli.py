@@ -1,7 +1,12 @@
+import logging
+
 import click
 from click_help_colors import HelpColorsGroup
 
 from .generator import Rost
+
+
+logger = logging.getLogger(__name__)
 
 
 ASCI_ART = """\
@@ -24,6 +29,39 @@ ASCI_ART = """\
     RRRRRRRR     RRRRRRR   ooooooooooo     sssssssssss              ttttttttttt
 
 """
+
+
+def add_options(options):
+    def _add_options(func):
+        for option in reversed(options):
+            func = option(func)
+        return func
+    return _add_options
+
+
+def validate_log_level(ctx, param, value):
+    if value is None or isinstance(value, int):
+        return value
+
+    log_level = getattr(logging, value.upper(), None)
+    if not isinstance(log_level, int):
+        raise click.BadParameter("Level {!r} is not a valid log level.".format(value))
+
+    return log_level
+
+
+def config_logging(log_level, log_file=None):
+    if log_level is None:
+        return
+
+    logger = logging.getLogger(__package__)
+    logger.setLevel(log_level)
+
+    if log_file:
+        logger.addHandler(logging.FileHandler(log_file))
+    else:
+        logger.addHandler(logging.StreamHandler())
+
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
@@ -61,13 +99,15 @@ port_option = click.option(
     help="The port to which the server should lissen."
 )
 
+log_level_option = click.option(
+    "--log-level", type=click.UNPROCESSED, callback=validate_log_level,
+    help="The log level for the package level logger."
+)
 
-def add_options(options):
-    def _add_options(func):
-        for option in reversed(options):
-            func = option(func)
-        return func
-    return _add_options
+log_file_option = click.option(
+    "--log-file", type=click.Path(),
+    help="If set will log to a file rather that stderr."
+)
 
 
 @click.group(
@@ -87,10 +127,14 @@ def cli():
 @add_options([
     searchpath_option,
     outputpath_option,
-    staticpath_option
+    staticpath_option,
+    log_level_option,
+    log_file_option,
 ])
-def build(searchpath, outputpath, staticpaths):
+def build(searchpath, outputpath, staticpaths, log_level, log_file):
     """Build the project."""
+
+    config_logging(log_level, log_file)
 
     click.echo("    Searchpath:  {}".format(click.style(searchpath, fg="blue", bold=True)))
     click.echo("    Outputpath:  {}".format(click.style(outputpath, fg="blue", bold=True)))
@@ -112,10 +156,14 @@ def build(searchpath, outputpath, staticpaths):
     staticpath_option,
     bind_option,
     port_option,
-    livereload_option
+    livereload_option,
+    log_level_option,
+    log_file_option
 ])
-def watch(searchpath, outputpath, staticpaths, bind, port, use_livereload):
-    """Start an development server and re-build the project if the source directory for change."""
+def watch(searchpath, outputpath, staticpaths, bind, port, use_livereload, log_level, log_file):
+    """Start a development server and re-build the project on change."""
+
+    config_logging(log_level, log_file)
 
     def before_callback(**kwargs):
         click.echo()
