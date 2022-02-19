@@ -45,7 +45,7 @@ class FileMonitor:
 
         self.observer = Observer()
         for path in self.monitorpaths:
-            logger.info("Watching {!r} for changes...".format(self.searchpath))
+            logger.info("Watching {!r} for changes...".format(path))
             self.observer.schedule(event_handler, path, recursive=True)
 
         self.observer.start()
