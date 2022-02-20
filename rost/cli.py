@@ -6,9 +6,6 @@ from click_help_colors import HelpColorsGroup
 from .generator import Rost
 
 
-logger = logging.getLogger(__name__)
-
-
 ASCI_ART = """\
 
     RRRRRRRRRRRRRRRRR                                              tttt
@@ -173,7 +170,7 @@ def watch(searchpath, outputpath, staticpaths, bind, port, use_livereload, log_l
         click.secho(">>> Successfully build.", bold=True, fg="green")
         click.echo()
 
-    monitorpaths = [searchpath]
+    monitorpaths = []
     url = "http://{}:{}/".format(bind, port)
 
     click.echo("    Searchpath:   {}".format(click.style(searchpath, fg="blue", bold=True)))

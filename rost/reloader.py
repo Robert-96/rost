@@ -70,7 +70,5 @@ class LiveReloader:
 
 
 if __name__ == "__main__":
-    import logging
-
     reloader = LiveReloader(["dist"], lambda: logging.info("Callback called."))
     reloader.serve()

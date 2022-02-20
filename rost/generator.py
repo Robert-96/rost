@@ -189,6 +189,7 @@ class Rost:
         for path in self.staticpaths:
             source = os.path.join(self.searchpath, path)
             target = os.path.join(self.outputpath, path)
+            logging.info("Copy asset from {} to {}.".format(source, target))
 
             if os.path.isdir(source):
                 shutil.copytree(source, target)
@@ -225,6 +226,8 @@ class Rost:
 
     def watch(self, monitorpaths=None, bind="localhost", port=8080, use_livereload=False):
         """Start an development server and re-build the project if the source directory for change.
+
+        By default the ``self.searchpath`` and ``self.staticpaths`` are monitored.
 
         Args:
             monitorpaths (:obj:`list` of :obj:`Paths`, optional): A list of paths to monitor. Defaults to ``None``.
