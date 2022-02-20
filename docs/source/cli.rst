@@ -15,7 +15,8 @@ Invocation
     $ rost [...]
 
 
-You can also invoke the command through the Python interpreter from the command line:
+You can also invoke the command through the Python interpreter from the command
+line:
 
 .. code-block:: console
 

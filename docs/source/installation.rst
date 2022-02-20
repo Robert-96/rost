@@ -32,16 +32,16 @@ update the code from the ``main`` branch:
 Upgrade
 =======
 
-If you installed a stable release via pip and wish to upgrade to the latest stable
-release, you can do so by adding ``--upgrade``:
+If you installed a stable release via pip and wish to upgrade to the latest
+stable release, you can do so by adding ``--upgrade``:
 
 .. code-block::
 
     $ python3 -m pip instal --upgrade rost
 
 
-If you installed Rost via the *“living on the edge“* method, simply perform the same
-step to install the most recent version.
+If you installed Rost via the *“living on the edge“* method, simply perform the
+same step to install the most recent version.
 
 
 How to invoke ``rost``?
@@ -82,4 +82,5 @@ You can also invoke ``rost`` from Python code directly:
     build()
 
 
-For more details check out the :doc:`advanced` section, or the :doc:`api` section.
+For more details check out the :doc:`advanced` section, or the :doc:`api`
+section.

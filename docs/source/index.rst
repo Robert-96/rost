@@ -16,7 +16,8 @@ Overview
 Rost’s feature highlights include:
 
 * Includes a simple CLI tool to (re)generate your site build using Click_.
-* Includes support for monitor your source directory for changes, and regenerates your site if they change.
+* Includes support for monitor your source directory for changes, and
+  regenerates your site if they change.
 * Includes a developments server.
 * It also includes support for LiveReload_.
 
