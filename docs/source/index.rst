@@ -10,8 +10,15 @@ Get started with :doc:`installation` and then get a quick overview with the
 some of ``rost``’s more advanced features.
 
 
-.. _Jinja2: https://jinja.palletsprojects.com/en/2.11.x/
-.. _Click: https://click.palletsprojects.com/en/7.x/
+Overview
+========
+
+Rost’s feature highlights include:
+
+* Includes a simple CLI tool to (re)generate your site build using Click_.
+* Includes support for monitor your source directory for changes, and regenerates your site if they change.
+* Includes a developments server.
+* It also includes support for LiveReload_.
 
 
 Documentation
@@ -27,6 +34,7 @@ patterns.
    quickstart
    advanced
    api
+   cli
    changelog
    license
 
@@ -44,3 +52,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+.. _Jinja2: https://jinja.palletsprojects.com/en/2.11.x/
+.. _Click: https://click.palletsprojects.com/en/7.x/
+.. _LiveReload: https://livereload.readthedocs.io/en/latest/
